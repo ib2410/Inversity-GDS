@@ -12,3 +12,6 @@ Attempted to make a section for an ai chatbot so a user can receive a more perso
 
 4th iteration 
 Ensured the login and sign up page work a little bit better in the sense that they display the users name to confirm that they have in fact logged in/ signed up  
+
+# User Feedback
+Student1: "Ensure the tabs at the centre of the sreen are clickable so that i can find out more information if i am interested"

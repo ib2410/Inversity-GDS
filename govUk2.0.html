@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gov.uk 2.0</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .gov-blue {
+            background-color: #1D70B8;
+            color: white;
+        }
+        .event-card {
+            border: 2px solid #1D70B8;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .event-card:hover {
+            transform: scale(1.05);
+        }
+        .chat-container {
+            display: none;
+        }
+        .chat-container.active {
+            display: block;
+        }
+        .chat-message {
+            max-width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .user-message {
+            background-color: #E6F2FF;
+            align-self: flex-end;
+        }
+        .ai-message {
+            background-color: #F0F0F0;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <header class="gov-blue p-4 flex justify-between items-center shadow-md">
+        <!-- Gov.uk Logo -->
+        <a href="#" onclick="returnToHome(); return false;" class="flex items-center">
+            <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\govukLOGO.png" alt="Gov.uk Logo" class="h-12 w-30 bg-white p-2 rounded">
+        </a>
+
+        <!-- Search Bar -->
+        <div class="w-1/3">
+            <form class="flex">
+                <input 
+                    type="text" 
+                    placeholder="Search gov.uk" 
+                    class="w-full p-2 rounded-l-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                <button 
+                    type="submit" 
+                    class="bg-white text-blue-700 px-4 rounded-r-lg hover:bg-gray-100"
+                >
+                    Search
+                </button>
+            </form>
+        </div>
+
+        <!-- Login/Signup/User Profile Section -->
+        <div id="authButtons">
+            <button 
+                onclick="document.getElementById('loginModal').classList.remove('hidden')"
+                class="bg-white text-blue-700 px-4 py-2 rounded mr-2 hover:bg-gray-100"
+            >
+                Login
+            </button>
+            <button 
+                onclick="document.getElementById('signupModal').classList.remove('hidden')"
+                class="bg-white text-blue-700 px-4 py-2 rounded hover:bg-gray-100"
+            >
+                Sign Up
+            </button>
+        </div>
+        <div id="userProfile" class="hidden">
+            <span class="bg-white text-blue-700 px-4 py-2 rounded">
+                Welcome, <span id="username"></span>
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-grow">
+        <!-- Navigation Menu -->
+        <nav class="w-1/4 p-4 gov-blue shadow-lg">
+            <h2 class="text-xl font-bold mb-4">Navigation</h2>
+            <ul>
+                <li class="mb-2"><a href="#" class="text-white hover:underline hover:text-gray-200">Home</a></li>
+                <li class="mb-2"><a href="#" class="text-white hover:underline hover:text-gray-200">Services</a></li>
+                <li class="mb-2"><a href="#" class="text-white hover:underline hover:text-gray-200">Benefits</a></li>
+                <li class="mb-2"><a href="#" class="text-white hover:underline hover:text-gray-200">Taxes</a></li>
+                <li class="mb-2"><a href="#" class="text-white hover:underline hover:text-gray-200">Healthcare</a></li>
+                <li class="mb-2"><a href="#" class="text-white hover:underline hover:text-gray-200">Education</a></li>
+                <li class="mb-2">
+                    <a href="#" 
+                       onclick="toggleSection('news'); return false;" 
+                       class="text-white hover:underline hover:text-gray-200"
+                    >News & Events</a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" 
+                       onclick="toggleSection('chat'); return false;" 
+                       class="text-white hover:underline hover:text-gray-200 flex items-center"
+                    >
+                        AI Assistant
+                        <span class="ml-2 px-2 py-1 bg-white text-blue-700 text-xs rounded">New</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- News/Events Section -->
+        <main id="newsSection" class="w-3/4 p-6 bg-gray-50">
+            <div class="grid grid-cols-3 gap-6">
+                <a href="https://www.gov.uk/government/topical-events/autumn-statement-2023" class="event-card bg-white shadow-lg">
+                    <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\BudgetUpdate.png" alt="Budget Update" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg text-blue-800 mb-2">Budget Update</h3>
+                        <p class="text-gray-700">Comprehensive overview of the latest government budget announcements and financial strategies for the upcoming fiscal year.</p>
+                    </div>
+                </a>
+                <a href="https://www.gov.uk/government/organisations/department-of-health-and-social-care" class="event-card bg-white shadow-lg">
+                    <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\NationalHealth.png" alt="Healthcare Initiative" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg text-blue-800 mb-2">Healthcare Initiative</h3>
+                        <p class="text-gray-700">New national health program launched to improve access to medical services and support public health infrastructure.</p>
+                    </div>
+                </a>
+                <a href="https://www.gov.uk/government/organisations/department-for-education" class="event-card bg-white shadow-lg">
+                    <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\EducationReform.jpg" alt="Education Reform" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg text-blue-800 mb-2">Education Reform</h3>
+                        <p class="text-gray-700">Proposed comprehensive changes to the national education curriculum to enhance learning outcomes and skill development.</p>
+                    </div>
+                </a>
+            </div>
+
+                <!-- Popular Services Section -->
+<div class="mt-12">
+    <h2 class="text-2xl font-bold mb-6 text-blue-800">Popular Services</h2>
+    
+    <div class="grid grid-cols-4 gap-6">
+        <!-- Google -->
+        <a href="https://www.google.com" target="_blank" 
+           class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#4285F4] rounded-full flex items-center justify-center mb-4">
+                <span class="text-white text-2xl font-bold">G</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800">Google</h3>
+            <p class="text-sm text-gray-600 text-center mt-2">Search Engine</p>
+        </a>
+
+        <!-- National Archives -->
+        <a href="https://www.nationalarchives.gov.uk/" target="_blank"
+           class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#FF0000] rounded-full flex items-center justify-center mb-4">
+                <span class="text-white text-2xl font-bold">NA</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800">National archives</h3>
+            <p class="text-sm text-gray-600 text-center mt-2">Government service</p>
+        </a>
+
+        <!-- Wikipedia -->
+        <a href="https://www.wikipedia.org" target="_blank"
+           class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#000000] rounded-full flex items-center justify-center mb-4">
+                <span class="text-white text-2xl font-bold">W</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800">Wikipedia</h3>
+            <p class="text-sm text-gray-600 text-center mt-2">Online Encyclopedia</p>
+        </a>
+
+        <!-- Gov.uk -->
+        <a href="https://www.gov.uk/book-driving-test" target="_blank"
+           class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col items-center">
+            <div class="w-16 h-16 bg-[#1D70B8] rounded-full flex items-center justify-center mb-4">
+                <span class="text-white text-2xl font-bold">UK</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800">Driving Test</h3>
+            <p class="text-sm text-gray-600 text-center mt-2">Book Your Driving Test</p>
+        </a>
+    </div>
+
+    <!-- New Footer Links Section -->
+    <div class="mt-8 flex justify-center gap-4">
+        <a href="https://www.gov.uk/help/terms-conditions" 
+           class="bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition-shadow duration-300 text-blue-800 text-sm">
+            Terms of Service
+        </a>
+        <a href="https://www.gov.uk/contact" 
+           class="bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition-shadow duration-300 text-blue-800 text-sm">
+            Contact Info
+        </a>
+        <a href="https://www.gov.uk/help/cookies" 
+           class="bg-white px-4 py-2 rounded-lg shadow hover:shadow-md transition-shadow duration-300 text-blue-800 text-sm">
+            Cookie Settings
+        </a>
+    </div>
+</div>
+        </main>
+
+        <!-- AI Assistant Section -->
+        <div id="chatSection" class="w-3/4 p-6 bg-gray-50 hidden">
+            <div class="bg-white shadow-lg rounded-lg p-6 h-full flex flex-col">
+                <h1 class="text-2xl font-bold mb-6 text-blue-800">UK Current Events AI Assistant</h1>
+                
+                <!-- Chatbox -->
+                <div id="chatbox" class="flex-grow overflow-y-auto mb-4 flex flex-col min-h-[400px]">
+                    <div class="ai-message self-start chat-message">
+                        Hello! I'm the Gov.uk AI Assistant. What current events or information about the UK would you like to know about today?
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="flex mt-auto">
+                    <input 
+                        type="text" 
+                        id="chatInput" 
+                        placeholder="Ask about UK current events..." 
+                        class="flex-grow p-2 border rounded-l-lg text-black"
+                    >
+                    <button 
+                        onclick="sendMessage()"
+                        class="gov-blue px-4 py-2 rounded-r-lg hover:bg-blue-700"
+                    >
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+        <div class="bg-white p-8 rounded">
+            <h2 class="text-xl mb-4">Login</h2>
+            <form>
+                <input type="email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
+                <input type="password" placeholder="Password" class="w-full p-2 mb-4 border rounded">
+                <div class="flex justify-between">
+                    <button type="submit" class="gov-blue px-4 py-2 rounded">Login</button>
+                    <button 
+                        type="button" 
+                        onclick="document.getElementById('loginModal').classList.add('hidden')"
+                        class="bg-gray-200 px-4 py-2 rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex justify-center items-center">
+        <div class="bg-white p-8 rounded">
+            <h2 class="text-xl mb-4">Sign Up</h2>
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <input type="text" id="fullName" placeholder="Full Name" class="w-full p-2 mb-4 border rounded">
+                <input type="email" placeholder="Email" class="w-full p-2 mb-4 border rounded">
+                <input type="password" placeholder="Password" class="w-full p-2 mb-4 border rounded">
+                <input type="password" placeholder="Confirm Password" class="w-full p-2 mb-4 border rounded">
+                <div class="flex justify-between">
+                    <button type="submit" class="gov-blue px-4 py-2 rounded">Sign Up</button>
+                    <button 
+                        type="button" 
+                        onclick="document.getElementById('signupModal').classList.add('hidden')"
+                        class="bg-gray-200 px-4 py-2 rounded"
+                    >
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function returnToHome() {
+            const newsSection = document.getElementById('newsSection');
+            const chatSection = document.getElementById('chatSection');
+            
+            // Show news section (home page)
+            newsSection.classList.remove('hidden');
+            // Hide chat section
+            chatSection.classList.add('hidden');
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            // Get the username (full name) from the form
+            const fullName = document.getElementById('fullName').value;
+            
+            if (fullName.trim() === '') {
+                alert('Please enter your full name');
+                return;
+            }
+            
+            // Update the header to show the username
+            document.getElementById('username').textContent = fullName;
+            document.getElementById('authButtons').classList.add('hidden');
+            document.getElementById('userProfile').classList.remove('hidden');
+            
+            // Hide the signup modal
+            document.getElementById('signupModal').classList.add('hidden');
+            
+            // Clear the form
+            document.getElementById('signupForm').reset();
+        }
+
+        function toggleSection(section) {
+            const newsSection = document.getElementById('newsSection');
+            const chatSection = document.getElementById('chatSection');
+            
+            if (section === 'chat') {
+                newsSection.classList.add('hidden');
+                chatSection.classList.remove('hidden');
+            } else {
+                newsSection.classList.remove('hidden');
+                chatSection.classList.add('hidden');
+            }
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const chatbox = document.getElementById('chatbox');
+
+            if (chatInput.value.trim() === '') return;
+
+            // Add user message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('chat-message', 'user-message', 'self-end');
+            userMessageDiv.textContent = chatInput.value;
+            chatbox.appendChild(userMessageDiv);
+
+            // Add AI response
+            const aiMessageDiv = document.createElement('div');
+            aiMessageDiv.classList.add('chat-message', 'ai-message', 'self-start');
+            
+            const userMessage = chatInput.value.toLowerCase();
+            if (userMessage.includes(userMessage)) {
+                window.location.href = `https://www.gov.uk/search/all?keywords=${encodeURIComponent(userMessage)}`;
+            } else {
+                aiMessageDiv.textContent = "I can provide information on various UK current events. Could you be more specific about what you'd like to know?";
+            }
+
+            chatbox.appendChild(aiMessageDiv);
+
+            // Clear input and scroll to bottom
+            chatInput.value = '';
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+
+        // Allow sending message with Enter key
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+
+
+
+</body>
+
+
+</html>

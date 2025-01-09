@@ -15,4 +15,5 @@ Ensured the login and sign up page work a little bit better in the sense that th
 
 # User Feedback
 Student1: "Ensure the tabs at the centre of the sreen are clickable so that i can find out more information if i am interested"
-student2: "It would be useful if there was similar information accessible as Gov.uk such as driving tests etc.."
+
+Student2: "It would be useful if there was similar information accessible as Gov.uk such as driving tests etc.."

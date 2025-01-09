@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -51,14 +51,15 @@
     <header class="gov-blue p-4 flex justify-between items-center shadow-md">
         <!-- Gov.uk Logo -->
         <a href="#" onclick="returnToHome(); return false;" class="flex items-center">
-            <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\govukLOGO.png" alt="Gov.uk Logo" class="h-12 w-30 bg-white p-2 rounded">
+            <img src="C:\Users\ib.2410066\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\govukLOGO.png" alt="Gov.uk Logo" class="h-12 w-30 bg-white p-2 rounded">
         </a>
 
         <!-- Search Bar -->
         <div class="w-1/3">
-            <form class="flex">
+            <form onsubmit="handleSearch(event)" class="flex">
                 <input 
                     type="text" 
+                    id="searchInput"
                     placeholder="Search gov.uk" 
                     class="w-full p-2 rounded-l-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
@@ -70,7 +71,6 @@
                 </button>
             </form>
         </div>
-
         <!-- Login/Signup/User Profile Section -->
         <div id="authButtons">
             <button 
@@ -127,21 +127,21 @@
         <main id="newsSection" class="w-3/4 p-6 bg-gray-50">
             <div class="grid grid-cols-3 gap-6">
                 <a href="https://www.gov.uk/government/topical-events/autumn-statement-2023" class="event-card bg-white shadow-lg">
-                    <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\BudgetUpdate.png" alt="Budget Update" class="w-full h-48 object-cover">
+                    <img src="C:\Users\ib.2410066\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\BudgetUpdate.png" alt="Budget Update" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-bold text-lg text-blue-800 mb-2">Budget Update</h3>
                         <p class="text-gray-700">Comprehensive overview of the latest government budget announcements and financial strategies for the upcoming fiscal year.</p>
                     </div>
                 </a>
                 <a href="https://www.gov.uk/government/organisations/department-of-health-and-social-care" class="event-card bg-white shadow-lg">
-                    <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\NationalHealth.png" alt="Healthcare Initiative" class="w-full h-48 object-cover">
+                    <img src="C:\Users\ib.2410066\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\NationalHealth.png" alt="Healthcare Initiative" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-bold text-lg text-blue-800 mb-2">Healthcare Initiative</h3>
                         <p class="text-gray-700">New national health program launched to improve access to medical services and support public health infrastructure.</p>
                     </div>
                 </a>
                 <a href="https://www.gov.uk/government/organisations/department-for-education" class="event-card bg-white shadow-lg">
-                    <img src="C:\Users\ib.2410066.ADMIN\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\EducationReform.jpg" alt="Education Reform" class="w-full h-48 object-cover">
+                    <img src="C:\Users\ib.2410066\OneDrive - wsfc.ac.uk\Documents\computer science\vsCodeProjects\inversity projects\images for the gov.uk project\EducationReform.jpg" alt="Education Reform" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-bold text-lg text-blue-800 mb-2">Education Reform</h3>
                         <p class="text-gray-700">Proposed comprehensive changes to the national education curriculum to enhance learning outcomes and skill development.</p>
@@ -353,7 +353,7 @@
             
             const userMessage = chatInput.value.toLowerCase();
             if (userMessage.includes(userMessage)) {
-                window.location.href = `https://www.gov.uk/search/all?keywords=${encodeURIComponent(userMessage)}`;
+                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(userMessage)}`;
             } else {
                 aiMessageDiv.textContent = "I can provide information on various UK current events. Could you be more specific about what you'd like to know?";
             }
@@ -372,6 +372,297 @@
             }
         });
     </script>
+    <script>
+        function handleSearch(event) {
+            event.preventDefault();
+            const searchInput = document.getElementById('searchInput');
+            const searchQuery = searchInput.value.trim();
+            
+            if (searchQuery !== '') {
+                // Redirect to Google search with the query
+                const googleSearchUrl = `https://www.gov.uk/search/all?keywords=${encodeURIComponent(searchQuery)}`;
+                window.open(googleSearchUrl, '_blank');
+                
+                // Clear the search input
+                searchInput.value = '';
+            }
+        }
+        // First, add this script to your HTML head section to include the OpenAI API
+const OPENAI_API_KEY = 'your-api-key-here'; // You'll need to replace this with your actual API key
+
+async function generateAIResponse(userInput) {
+    try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${OPENAI_API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [{
+                    role: "system",
+                    content: "You are a helpful AI assistant for the UK government website (GOV.UK). Provide accurate, up-to-date information about UK government services, policies, and current events. Keep responses concise and formal. Only provide information that would be appropriate for an official government website."
+                }, {
+                    role: "user",
+                    content: userInput
+                }],
+                max_tokens: 150,
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+        return data.choices[0].message.content;
+    } catch (error) {
+        console.error('Error:', error);
+        return "I apologize, but I'm having trouble connecting to my knowledge base. Please try again in a moment.";
+    }
+}
+
+// Updated sendMessage function with loading state
+async function sendMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const chatbox = document.getElementById('chatbox');
+    const userMessage = chatInput.value.trim();
+
+    if (userMessage === '') return;
+
+    // Add user message
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.classList.add('chat-message', 'user-message', 'self-end');
+    userMessageDiv.textContent = userMessage;
+    chatbox.appendChild(userMessageDiv);
+
+    // Add loading indicator
+    const loadingDiv = document.createElement('div');
+    loadingDiv.classList.add('chat-message', 'ai-message', 'self-start');
+    loadingDiv.innerHTML = '<div class="typing-indicator">Thinking<span>.</span><span>.</span><span>.</span></div>';
+    chatbox.appendChild(loadingDiv);
+
+    // Clear input
+    chatInput.value = '';
+    chatbox.scrollTop = chatbox.scrollHeight;
+
+    // Get AI response
+    const aiResponse = await generateAIResponse(userMessage);
+
+    // Remove loading indicator
+    chatbox.removeChild(loadingDiv);
+
+    // Add AI response with typing effect
+    const aiMessageDiv = document.createElement('div');
+    aiMessageDiv.classList.add('chat-message', 'ai-message', 'self-start');
+    chatbox.appendChild(aiMessageDiv);
+
+    // Typing effect
+    let i = 0;
+    const speed = 20; // milliseconds per character
+    function typeWriter() {
+        if (i < aiResponse.length) {
+            aiMessageDiv.textContent += aiResponse.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+    }
+    typeWriter();
+}
+
+// Add event listener for Enter key
+document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+
+// Add this CSS to your existing styles
+const newStyles = `
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .typing-indicator span {
+        animation: typing 1s infinite;
+        opacity: 0.5;
+    }
+
+    .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
+`;
+
+// Add the styles to the document
+const styleSheet = document.createElement("style");
+styleSheet.textContent = newStyles;
+document.head.appendChild(styleSheet);
+
+// Comprehensive knowledge base for UK government services
+const knowledgeBase = {
+    // Core government services
+    services: {
+        driving: {
+            licenses: "To apply for or renew a driving license, visit https://www.gov.uk/driving-licence. Current processing time is 3-4 weeks.",
+            tests: "Book your driving test at https://www.gov.uk/book-driving-test. Theory tests cost £23, practical tests cost £62.",
+            vehicles: "Register, tax, or check MOT status at https://www.gov.uk/vehicle-tax. Road tax starts from £165 annually.",
+            general: "I can help you with driving licenses, booking tests, and vehicle registration. What specifically do you need?"
+        },
+        benefits: {
+            universal_credit: "Universal Credit helps with living costs. Apply online at https://www.gov.uk/universal-credit. Payments are made monthly.",
+            housing: "Housing Benefit helps pay your rent if you're unemployed or on low income. Check eligibility at https://www.gov.uk/housing-benefit",
+            disability: "Personal Independence Payment (PIP) can help with extra living costs. Apply at https://www.gov.uk/pip",
+            general: "The UK offers various benefits including Universal Credit, Housing Benefit, and PIP. Which would you like to know more about?"
+        },
+        healthcare: {
+            nhs: "The NHS provides free healthcare to UK residents. Register with a GP at https://www.nhs.uk/register-with-a-gp",
+            mental_health: "NHS mental health services are available through your GP or by self-referral. Visit https://www.nhs.uk/mental-health",
+            prescriptions: "Prescription costs are £9.65 per item in England. Some people qualify for free prescriptions.",
+            general: "I can provide information about NHS services, prescriptions, and mental health support. What do you need?"
+        }
+    },
+
+    // Current policies and initiatives
+    current_affairs: {
+        budget: {
+            overview: "The latest budget includes changes to National Insurance, minimum wage increases, and new economic measures.",
+            tax_changes: "Income tax thresholds are frozen until 2028. National Insurance has been reduced by 2%.",
+            support: "Cost of living support includes energy bill help and benefits increases."
+        },
+        education: {
+            schools: "Current focus is on improving numeracy and literacy. £2.3b additional funding announced for schools.",
+            universities: "Student loan repayment threshold is £27,295. Interest rates are currently at 7.1%.",
+            skills: "New T-Levels combine classroom learning with industry placements."
+        },
+        housing: {
+            schemes: "Help to Buy ISA is closed to new accounts. Mortgage Guarantee Scheme helps with 5% deposits.",
+            rental: "The Renters Reform Bill strengthens tenant rights and ends 'no fault' evictions.",
+            general: "Various schemes help first-time buyers and renters. What would you like to know about?"
+        }
+    },
+
+    // Location-specific information
+    regions: {
+        england: {
+            council_tax: "Council tax bands vary by location. Check your band at https://www.gov.uk/council-tax-bands",
+            local_services: "Find your local council services at https://www.gov.uk/find-local-council"
+        },
+        scotland: {
+            specific: "Some services are devolved. Visit https://www.mygov.scot for Scotland-specific information.",
+            differences: "Scotland has different laws for education, healthcare, and property."
+        },
+        wales: {
+            specific: "Some services are devolved. Visit https://www.gov.wales for Wales-specific information.",
+            differences: "Wales has different systems for education and healthcare."
+        }
+    }
+};
+
+// Function to find best matching response
+function findResponse(userInput) {
+    const input = userInput.toLowerCase();
+    
+    // Helper function to check if input contains keywords
+    function containsKeywords(text, keywords) {
+        return keywords.some(keyword => text.includes(keyword));
+    }
+
+    // Check for service-related queries
+    if (containsKeywords(input, ['drive', 'driving', 'license', 'car', 'vehicle', 'mot'])) {
+        if (containsKeywords(input, ['test', 'exam'])) return knowledgeBase.services.driving.tests;
+        if (containsKeywords(input, ['license', 'licence'])) return knowledgeBase.services.driving.licenses;
+        if (containsKeywords(input, ['tax', 'mot', 'register'])) return knowledgeBase.services.driving.vehicles;
+        return knowledgeBase.services.driving.general;
+    }
+
+    if (containsKeywords(input, ['benefit', 'universal credit', 'welfare', 'pip', 'housing benefit'])) {
+        if (containsKeywords(input, ['universal', 'credit'])) return knowledgeBase.services.benefits.universal_credit;
+        if (containsKeywords(input, ['house', 'housing', 'rent'])) return knowledgeBase.services.benefits.housing;
+        if (containsKeywords(input, ['disability', 'pip'])) return knowledgeBase.services.benefits.disability;
+        return knowledgeBase.services.benefits.general;
+    }
+
+    if (containsKeywords(input, ['health', 'nhs', 'doctor', 'medical', 'gp', 'prescription'])) {
+        if (containsKeywords(input, ['mental', 'therapy', 'counselling'])) return knowledgeBase.services.healthcare.mental_health;
+        if (containsKeywords(input, ['prescription', 'medicine'])) return knowledgeBase.services.healthcare.prescriptions;
+        if (containsKeywords(input, ['register', 'gp'])) return knowledgeBase.services.healthcare.nhs;
+        return knowledgeBase.services.healthcare.general;
+    }
+
+    // Check for current affairs queries
+    if (containsKeywords(input, ['budget', 'tax', 'money', 'finance'])) {
+        if (containsKeywords(input, ['support', 'help', 'cost of living'])) return knowledgeBase.current_affairs.budget.support;
+        if (containsKeywords(input, ['tax'])) return knowledgeBase.current_affairs.budget.tax_changes;
+        return knowledgeBase.current_affairs.budget.overview;
+    }
+
+    // Regional queries
+    if (containsKeywords(input, ['scotland', 'scottish'])) return knowledgeBase.regions.scotland.specific;
+    if (containsKeywords(input, ['wales', 'welsh'])) return knowledgeBase.regions.wales.specific;
+
+    // Default response
+    return "I can help you with information about UK government services, benefits, healthcare, and current policies. Please ask a specific question about any of these topics.";
+}
+
+// Updated sendMessage function
+async function sendMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const chatbox = document.getElementById('chatbox');
+    const userMessage = chatInput.value.trim();
+
+    if (userMessage === '') return;
+
+    // Add user message
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.classList.add('chat-message', 'user-message', 'self-end');
+    userMessageDiv.textContent = userMessage;
+    chatbox.appendChild(userMessageDiv);
+
+    // Get response from knowledge base
+    const response = findResponse(userMessage);
+
+    // Add AI response with typing effect
+    const aiMessageDiv = document.createElement('div');
+    aiMessageDiv.classList.add('chat-message', 'ai-message', 'self-start');
+    chatbox.appendChild(aiMessageDiv);
+
+    // Typing effect
+    let i = 0;
+    const speed = 20;
+    function typeWriter() {
+        if (i < response.length) {
+            aiMessageDiv.textContent += response.charAt(i);
+            i++;
+            setTimeout(typeWriter, speed);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+    }
+    typeWriter();
+
+    // Clear input
+    chatInput.value = '';
+}
+
+// Event listener for Enter key
+document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+        
+        </script>
+
+
 
 
 
@@ -379,3 +670,4 @@
 
 
 </html>
+

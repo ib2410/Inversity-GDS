@@ -17,3 +17,15 @@ Ensured the login and sign up page work a little bit better in the sense that th
 Student1: "Ensure the tabs at the centre of the sreen are clickable so that i can find out more information if i am interested"
 
 Student2: "It would be useful if there was similar information accessible as Gov.uk such as driving tests etc.."
+
+
+# credits
+Claude.ai
+gov.uk
+
+# known issues
+The chatbot doesnt use AI , it has a iimited number of responses 
+
+The design is not what i pictured since there is a lot of empty spaces and due to a lack of time I couldnt add specific pages for things such as driving license info so my website forwasrds the user to the information that already exist on gov.uk
+
+Claude.ai has limited free daily uses so i couldnt add all the exrta details i wanted such as making the left side panel buttons functional so i stuck to neccessaries.
